@@ -6,12 +6,12 @@ class Address(models.Model):
     country = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     street = models.CharField(max_length=100)
-    house_number = models.PositiveSmallIntegerField()
+    house_number = models.PositiveIntegerField()
 
     class Meta:
         verbose_name = "Адрес"
         verbose_name_plural = "Адреса"
-w
+
 
 class Contact(models.Model):
     email = models.EmailField()
