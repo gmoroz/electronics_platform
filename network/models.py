@@ -8,12 +8,19 @@ class Address(models.Model):
     house_number = models.PositiveSmallIntegerField()
 
 
-class Contacts(models.Model):
-    email: models.EmailField()
-    address: models.ForeignKey(Address, on_delete=models.CASCADE)
+class Contact(models.Model):
+    email = models.EmailField()
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
 
-class Products(models.Model):
+class Product(models.Model):
     name = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
     release_date = models.DateField()
+
+
+class Employee(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+
+
