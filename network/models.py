@@ -120,5 +120,5 @@ class Network(models.Model):
         return f"Сеть № {self.id}"
 
     class Meta:
-        verbose_name = "Сеть по продаже электроники N"
-        verbose_name_plural = "Сети по продаже электроники"
+        verbose_name = "Сеть поставщиков"
+        verbose_name_plural = "Сети поставщиков"

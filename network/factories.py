@@ -74,14 +74,3 @@ class BusinessmanFactory(NetworkObjFactory):
 
     class Meta:
         model = net_models.Businessman
-
-
-class NetworkFactory(DjangoModelFactory):
-    plant = factory.SubFactory(PlantFactory)
-    distributor = factory.SubFactory(DistributorFactory)
-    dealership = factory.SubFactory(DealershipFactory)
-    retail_chain = factory.SubFactory(RetailChainFactory)
-    business_man = factory.SubFactory(BusinessmanFactory)
-
-    class Meta:
-        model = net_models.Network
