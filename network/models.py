@@ -8,3 +8,8 @@ class Address(models.Model):
     house_number = models.PositiveSmallIntegerField()
 
 
+class Contacts(models.Model):
+    email: models.EmailField()
+    address: models.ForeignKey(Address, on_delete=models.CASCADE)
+
+
