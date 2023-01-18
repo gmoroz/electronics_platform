@@ -1,4 +1,5 @@
 from django.contrib import admin
-from .models import Address
+from . import models as net_models
 
-admin.site.register(Address)
+admin.site.register(net_models.Address)
+admin.site.register(net_models.Plant)

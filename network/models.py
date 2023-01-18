@@ -12,6 +12,9 @@ class Address(models.Model):
         verbose_name = "Адрес"
         verbose_name_plural = "Адреса"
 
+    def __str__(self):
+        return f"{self.house_number}, {self.street} {self.country}, {self.city}"
+
 
 class Contact(models.Model):
     email = models.EmailField()
@@ -19,7 +22,7 @@ class Contact(models.Model):
 
     class Meta:
         verbose_name = "Контакт"
-        verbose_name_plural = "Контакт"
+        verbose_name_plural = "Контакты"
 
 
 class Product(models.Model):
@@ -33,8 +36,7 @@ class Product(models.Model):
 
 
 class Employee(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
 
     class Meta:
         verbose_name = "Сотрудник"
@@ -55,7 +57,7 @@ class NetworkObj(models.Model):
         abstract = True
 
 
-class Factory(NetworkObj):
+class Plant(NetworkObj):
     pass
 
     class Meta:
@@ -63,7 +65,7 @@ class Factory(NetworkObj):
 
 
 class Distributor(NetworkObj):
-    provider = models.ForeignKey(Factory, on_delete=models.CASCADE)
+    provider = models.ForeignKey(Plant, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Дистрибьютор"
@@ -91,7 +93,7 @@ class Businessman(NetworkObj):
 
 
 class Network(models.Model):
-    factory = models.ForeignKey(Factory, on_delete=models.CASCADE)
+    factory = models.ForeignKey(Plant, on_delete=models.CASCADE)
     distributor = models.ForeignKey(Distributor, on_delete=models.CASCADE)
     dealership = models.ForeignKey(Dealership, on_delete=models.CASCADE)
     retail_chain = models.ForeignKey(RetailChain, on_delete=models.CASCADE)

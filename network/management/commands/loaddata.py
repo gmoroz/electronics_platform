@@ -4,10 +4,11 @@ import random
 from django.db import transaction
 from django.core.management.base import BaseCommand
 
-from network.models import *
-from network.factories import AddressFactory
+from network.factories import PlantFactory
 
-ADDRES
+
+NETWORKS_COUNT = 5
+
 
 class Command(BaseCommand):
     help = "Generates fake data"
@@ -16,6 +17,5 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
         self.stdout.write("Creating new data...")
-        for _ in range(NUM_USERS):
-            address = AddressFactory()
-
+        for _ in range(NETWORKS_COUNT):
+            PlantFactory()
