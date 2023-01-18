@@ -11,7 +11,7 @@ class Address(models.Model):
     class Meta:
         verbose_name = "Адрес"
         verbose_name_plural = "Адреса"
-
+w
 
 class Contact(models.Model):
     email = models.EmailField()
