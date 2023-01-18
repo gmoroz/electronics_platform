@@ -1,8 +1,6 @@
 from djmoney.models.fields import MoneyField
 from django.db import models
 
-import moneyed
-
 
 class Address(models.Model):
     country = models.CharField(max_length=50)
@@ -32,11 +30,20 @@ class NetworkObj(models.Model):
     contacts = models.ForeignKey(Contact, on_delete=models.CASCADE)
     products = models.ForeignKey(Product, on_delete=models.CASCADE)
     employees = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    provider = models.ForeignKey(..., on_delete=models.CASCADE)
     debt = MoneyField(
         decimal_places=2, default=0, default_currency="RUR", max_digits=11
     )
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+
+
+class Factory(NetworkObj):
+    pass
+
+    class Meta:
+        verbose_name = "Завод"
 
 
 class Network(models.Model):
