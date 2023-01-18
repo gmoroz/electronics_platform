@@ -13,3 +13,7 @@ class Contacts(models.Model):
     address: models.ForeignKey(Address, on_delete=models.CASCADE)
 
 
+class Products(models.Model):
+    name = models.CharField(max_length=100)
+    model = models.CharField(max_length=100)
+    release_date = models.DateField()
