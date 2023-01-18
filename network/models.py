@@ -110,8 +110,15 @@ class Businessman(NetworkObj):
 
 
 class Network(models.Model):
-    factory = models.ForeignKey(Plant, on_delete=models.CASCADE)
+    plant = models.ForeignKey(Plant, on_delete=models.CASCADE)
     distributor = models.ForeignKey(Distributor, on_delete=models.CASCADE)
     dealership = models.ForeignKey(Dealership, on_delete=models.CASCADE)
     retail_chain = models.ForeignKey(RetailChain, on_delete=models.CASCADE)
     business_man = models.ForeignKey(Businessman, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Сеть № {self.id}"
+
+    class Meta:
+        verbose_name = "Сеть по продаже электроники N"
+        verbose_name_plural = "Сети по продаже электроники"
