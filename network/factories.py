@@ -41,11 +41,11 @@ class EmployeeFactory(DjangoModelFactory):
 
 
 class NetworkObjFactory(DjangoModelFactory):
-    name = factory.Faker("sentence", nb_words=2, variable_nb_words=True)
+    name = factory.Faker("company")
     contacts = factory.SubFactory(ContactFactory)
     products = factory.SubFactory(ProductFactory)
     employees = factory.SubFactory(EmployeeFactory)
-    debt = decimal.Decimal(random.randrange(2000, 1000000)) / 100
+    debt = decimal.Decimal(random.randrange(50000, 1000000)) / 100
 
     class Meta:
         model = net_models.NetworkObj

@@ -8,17 +8,20 @@ class Address(models.Model):
     street = models.CharField(max_length=100)
     house_number = models.PositiveIntegerField()
 
+    def __str__(self):
+        return f"{self.house_number}, {self.street} {self.country}, {self.city}"
+
     class Meta:
         verbose_name = "Адрес"
         verbose_name_plural = "Адреса"
-
-    def __str__(self):
-        return f"{self.house_number}, {self.street} {self.country}, {self.city}"
 
 
 class Contact(models.Model):
     email = models.EmailField()
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.address}"
 
     class Meta:
         verbose_name = "Контакт"
@@ -30,6 +33,9 @@ class Product(models.Model):
     model = models.CharField(max_length=100)
     release_date = models.DateField()
 
+    def __str__(self):
+        return f"{self.name}"
+
     class Meta:
         verbose_name = "Продукт"
         verbose_name_plural = "Продукты"
@@ -38,6 +44,9 @@ class Product(models.Model):
 class Employee(models.Model):
     name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return f"{self.name}"
+
     class Meta:
         verbose_name = "Сотрудник"
         verbose_name_plural = "Сотрудники"
@@ -45,13 +54,16 @@ class Employee(models.Model):
 
 class NetworkObj(models.Model):
     name = models.CharField(max_length=50)
-    contacts = models.ForeignKey(Contact, on_delete=models.CASCADE)
-    products = models.ForeignKey(Product, on_delete=models.CASCADE)
-    employees = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    contacts = models.ManyToManyField(Contact)
+    products = models.ManyToManyField(Product)
+    employees = models.ManyToManyField(Employee)
     debt = MoneyField(
         decimal_places=2, default=0, default_currency="RUR", max_digits=11
     )
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name}"
 
     class Meta:
         abstract = True
@@ -62,6 +74,7 @@ class Plant(NetworkObj):
 
     class Meta:
         verbose_name = "Завод"
+        verbose_name_plural = "Заводы"
 
 
 class Distributor(NetworkObj):
@@ -69,6 +82,7 @@ class Distributor(NetworkObj):
 
     class Meta:
         verbose_name = "Дистрибьютор"
+        verbose_name_plural = "Дистрибьюторы"
 
 
 class Dealership(NetworkObj):
@@ -76,6 +90,7 @@ class Dealership(NetworkObj):
 
     class Meta:
         verbose_name = "Диллерский центр"
+        verbose_name_plural = "Диллерские центры"
 
 
 class RetailChain(NetworkObj):
@@ -83,6 +98,7 @@ class RetailChain(NetworkObj):
 
     class Meta:
         verbose_name = "Розничная сеть"
+        verbose_name_plural = "Розничные сети"
 
 
 class Businessman(NetworkObj):
@@ -90,6 +106,7 @@ class Businessman(NetworkObj):
 
     class Meta:
         verbose_name = "Индивидуальный предприниматель"
+        verbose_name_plural = "Индивидуальные предприниматели"
 
 
 class Network(models.Model):
