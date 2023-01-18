@@ -62,5 +62,37 @@ class Factory(NetworkObj):
         verbose_name = "Завод"
 
 
+class Distributor(NetworkObj):
+    provider = models.ForeignKey(Factory, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Дистрибьютор"
+
+
+class Dealership(NetworkObj):
+    provider = models.ForeignKey(Distributor, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Диллерский центр"
+
+
+class RetailChain(NetworkObj):
+    provider = models.ForeignKey(Dealership, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Розничная сеть"
+
+
+class Businessman(NetworkObj):
+    provider = models.ForeignKey(RetailChain, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Индивидуальный предприниматель"
+
+
 class Network(models.Model):
-    ...
+    factory = models.ForeignKey(Factory, on_delete=models.CASCADE)
+    distributor = models.ForeignKey(Distributor, on_delete=models.CASCADE)
+    dealership = models.ForeignKey(Dealership, on_delete=models.CASCADE)
+    retail_chain = models.ForeignKey(RetailChain, on_delete=models.CASCADE)
+    business_man = models.ForeignKey(Businessman, on_delete=models.CASCADE)
