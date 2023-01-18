@@ -8,10 +8,18 @@ class Address(models.Model):
     street = models.CharField(max_length=100)
     house_number = models.PositiveSmallIntegerField()
 
+    class Meta:
+        verbose_name = "Адрес"
+        verbose_name_plural = "Адреса"
+
 
 class Contact(models.Model):
     email = models.EmailField()
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Контакт"
+        verbose_name_plural = "Контакт"
 
 
 class Product(models.Model):
@@ -19,10 +27,18 @@ class Product(models.Model):
     model = models.CharField(max_length=100)
     release_date = models.DateField()
 
+    class Meta:
+        verbose_name = "Продукт"
+        verbose_name_plural = "Продукты"
+
 
 class Employee(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name = "Сотрудник"
+        verbose_name_plural = "Сотрудники"
 
 
 class NetworkObj(models.Model):
