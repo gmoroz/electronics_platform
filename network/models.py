@@ -3,8 +3,8 @@ from django.db import models
 
 
 class Address(models.Model):
-    country = models.CharField(max_length=50)
-    city = models.CharField(max_length=50)
+    country = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
     street = models.CharField(max_length=100)
     house_number = models.PositiveIntegerField()
 
@@ -53,7 +53,7 @@ class Employee(models.Model):
 
 
 class NetworkObj(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     contacts = models.ManyToManyField(Contact)
     products = models.ManyToManyField(Product)
     employees = models.ManyToManyField(Employee)

@@ -25,8 +25,8 @@ class ContactFactory(DjangoModelFactory):
 
 
 class ProductFactory(DjangoModelFactory):
-    name = factory.Faker("sentence", nb_words=3, variable_nb_words=True)
-    model = factory.Faker("sentence", nb_words=2, variable_nb_words=True)
+    name = factory.Faker("company")
+    model = factory.Faker("company")
     release_date = factory.Faker("past_date")
 
     class Meta:
@@ -42,10 +42,34 @@ class EmployeeFactory(DjangoModelFactory):
 
 class NetworkObjFactory(DjangoModelFactory):
     name = factory.Faker("company")
-    contacts = factory.SubFactory(ContactFactory)
-    products = factory.SubFactory(ProductFactory)
-    employees = factory.SubFactory(EmployeeFactory)
     debt = decimal.Decimal(random.randrange(50000, 1000000)) / 100
+
+    @factory.post_generation
+    def employees(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for employee in extracted:
+                self.employees.add(employee)
+
+    @factory.post_generation
+    def products(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for product in extracted:
+                self.products.add(product)
+
+    @factory.post_generation
+    def contacts(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for contact in extracted:
+                self.contacts.add(contact)
 
     class Meta:
         model = net_models.NetworkObj
