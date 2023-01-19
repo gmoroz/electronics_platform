@@ -15,3 +15,10 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = net_models.Contact
         fields = "__all__"
+
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = net_models.Employee
+        fields = "__all__"
