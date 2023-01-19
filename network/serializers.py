@@ -29,8 +29,24 @@ class EmployeeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class NetworkObj(serializers.ModelSerializer):
+class NetworkObjList(serializers.ModelSerializer):
     class Meta:
         model = net_models.NetworkObj
         abstract = True
+        fields = ("name", "provider_name", "debt")
+
+
+class PlantList(serializers.ModelSerializer):
+    class Meta:
+        model = net_models.Plant
+        fields = ("name", "created_at", "id")
+
+
+class PlantSerializer(serializers.ModelSerializer):
+    contacts = ContactSerializer(many=True)
+    products = ProductSerializer(many=True)
+    employees = EmployeeSerializer(many=True)
+
+    class Meta:
+        read_only_fields = "created_at"
         fields = "__all__"
