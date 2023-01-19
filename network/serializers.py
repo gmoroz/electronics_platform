@@ -17,7 +17,7 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ProductSerializer(serializers.Model):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = net_models.Product
         fields = "__all__"
@@ -29,3 +29,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class NetworkObj(serializers.ModelSerializer):
+    class Meta:
+        model = net_models.NetworkObj
+        abstract = True
+        fields = "__all__"
