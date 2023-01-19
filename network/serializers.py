@@ -17,8 +17,15 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ProductSerializer(serializers.Model):
+    class Meta:
+        model = net_models.Product
+        fields = "__all__"
+
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = net_models.Employee
         fields = "__all__"
+
+
