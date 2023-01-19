@@ -27,7 +27,8 @@ class Command(BaseCommand):
 
         self.stdout.write("Creating new data...")
         try:
-            for _ in range(NETWORKS_COUNT):
+            for i in range(NETWORKS_COUNT):
+                print(f"{i+1}/{NETWORKS_COUNT}")
                 plant = PlantFactory.create(
                     contacts=(ContactFactory() for _ in range(CONTACTS_COUNT)),
                     employees=(EmployeeFactory() for _ in range(EMPLOYEES_COUNT)),
