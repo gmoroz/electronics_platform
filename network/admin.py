@@ -76,21 +76,14 @@ class NetworkAdmin(admin.ModelAdmin):
     business_man_link.short_description = "businessman"
 
 
+@admin.register(net_models.Plant)
+class PlantAdmin(admin.ModelAdmin):
+    list_filter = ("contacts__address__city",)
+    list_display = ("name",)
+
+
 class BaseProviderAdmin(admin.ModelAdmin):
     list_filter = ("contacts__address__city",)
-    list_display = ("name", "debt")
-    actions = (clear_debt,)
-
-    class Meta:
-        abstract = True
-
-
-@admin.register(net_models.Plant)
-class PlantAdmin(BaseProviderAdmin):
-    pass
-
-
-class ProviderWithLink(BaseProviderAdmin):
     list_display = ("name", "debt", "provider_link")
     actions = (clear_debt,)
     readonly_fields = ("provider_link",)
@@ -108,24 +101,27 @@ class ProviderWithLink(BaseProviderAdmin):
 
     provider_link.short_description = "provider"
 
+    class Meta:
+        abstract = True
+
 
 @admin.register(net_models.Distributor)
-class DistributorAdmin(ProviderWithLink):
+class DistributorAdmin(BaseProviderAdmin):
     pass
 
 
 @admin.register(net_models.Dealership)
-class DealershipAdmin(ProviderWithLink):
+class DealershipAdmin(BaseProviderAdmin):
     pass
 
 
 @admin.register(net_models.RetailChain)
-class RetailChainAdmin(ProviderWithLink):
+class RetailChainAdmin(BaseProviderAdmin):
     pass
 
 
 @admin.register(net_models.Businessman)
-class BusinessmanAdmin(ProviderWithLink):
+class BusinessmanAdmin(BaseProviderAdmin):
     pass
 
 

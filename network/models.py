@@ -74,7 +74,13 @@ class NetworkObj(models.Model):
         abstract = True
 
 
-class Plant(NetworkObj):
+class Plant(models.Model):
+    name = models.CharField(max_length=100)
+    contacts = models.ManyToManyField(Contact)
+    products = models.ManyToManyField(Product)
+    employees = models.ManyToManyField(Employee)
+    created_at = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name = "Завод"
         verbose_name_plural = "Заводы"
