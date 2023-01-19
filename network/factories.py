@@ -52,7 +52,6 @@ class NetworkObjFactory(DjangoModelFactory):
     employees = factory.RelatedFactoryList(
         EmployeeFactory, size=lambda: random.randint(50, 100)
     )
-    debt_value = factory.fuzzy.FuzzyDecimal(10000.00, 1000000.00)
 
     @factory.post_generation
     def contacts(self, create, extracted, **kwargs):
@@ -91,6 +90,7 @@ class PlantFactory(NetworkObjFactory):
 
 
 class DistributorFactory(NetworkObjFactory):
+    debt_value = factory.fuzzy.FuzzyDecimal(10000.00, 1000000.00)
     provider = factory.SubFactory(PlantFactory)
 
     class Meta:
@@ -98,6 +98,7 @@ class DistributorFactory(NetworkObjFactory):
 
 
 class DealershipFactory(NetworkObjFactory):
+    debt_value = factory.fuzzy.FuzzyDecimal(10000.00, 1000000.00)
     provider = factory.SubFactory(DistributorFactory)
 
     class Meta:
@@ -105,6 +106,7 @@ class DealershipFactory(NetworkObjFactory):
 
 
 class RetailChainFactory(NetworkObjFactory):
+    debt_value = factory.fuzzy.FuzzyDecimal(10000.00, 1000000.00)
     provider = factory.SubFactory(DealershipFactory)
 
     class Meta:
@@ -113,9 +115,8 @@ class RetailChainFactory(NetworkObjFactory):
 
 class BusinessmanFactory(NetworkObjFactory):
     name = factory.Faker("name")
+    debt_value = factory.fuzzy.FuzzyDecimal(10000.00, 1000000.00)
     provider = factory.SubFactory(RetailChainFactory)
 
     class Meta:
         model = net_models.Businessman
-
-
