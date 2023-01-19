@@ -1,4 +1,3 @@
-from djmoney.models.fields import MoneyField
 from django.db import models
 
 
@@ -57,13 +56,15 @@ class NetworkObj(models.Model):
     contacts = models.ManyToManyField(Contact)
     products = models.ManyToManyField(Product)
     employees = models.ManyToManyField(Employee)
-    debt = MoneyField(
-        decimal_places=2, default=0, default_currency="RUR", max_digits=11
-    )
+    debt_value = models.DecimalField(decimal_places=2, default=0, max_digits=11)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.name}"
+
+    @property
+    def debt(self):
+        return "{} RUR".format(self.debt_value)
 
     class Meta:
         abstract = True

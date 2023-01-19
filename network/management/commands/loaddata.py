@@ -26,7 +26,7 @@ class Command(BaseCommand):
                 )
         except Exception as e:
             self.stdout.write(
-                "Something went wrong. Check this exception, google it, etc:\n\n {}".format(
+                "Something went wrong. Check this exception, google it, etc:\n\n{}".format(
                     e
                 )
             )

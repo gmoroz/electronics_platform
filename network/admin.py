@@ -4,6 +4,11 @@ from django.utils.safestring import mark_safe
 from . import models as net_models
 
 
+@admin.action(description="Set to 0 debt of selected provider(s)")
+def clear_debt(modeladmin, request, queryset):
+    queryset.update(debt=0)
+
+
 @admin.register(net_models.Network)
 class NetworkAdmin(admin.ModelAdmin):
     list_display = (
@@ -20,10 +25,6 @@ class NetworkAdmin(admin.ModelAdmin):
         "dealership_link",
         "retail_chain_link",
         "business_man_link",
-    )
-    list_filter = (
-        "plant__contacts__address__city",
-        "distributor__contacts__address__city",
     )
 
     def plant_link(self, obj):
@@ -75,7 +76,13 @@ class NetworkAdmin(admin.ModelAdmin):
     business_man_link.short_description = "businessman"
 
 
-admin.site.register(net_models.Plant)
+@admin.register(net_models.Plant)
+class PlantAdmin(admin.ModelAdmin):
+    list_filter = ("contacts__address__city",)
+    list_display = ("name", "debt")
+    actions = (clear_debt,)
+
+
 admin.site.register(net_models.Distributor)
 admin.site.register(net_models.Dealership)
 admin.site.register(net_models.RetailChain)
