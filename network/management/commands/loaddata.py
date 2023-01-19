@@ -1,10 +1,22 @@
 from django.db import transaction
 from django.core.management.base import BaseCommand
 
-from network.factories import BusinessmanFactory
+from network.factories import (
+    BusinessmanFactory,
+    ContactFactory,
+    PlantFactory,
+    EmployeeFactory,
+    ProductFactory,
+    DistributorFactory,
+    DealershipFactory,
+    RetailChainFactory,
+)
 from network.models import Network
 
 NETWORKS_COUNT = 5
+CONTACTS_COUNT = 3
+EMPLOYEES_COUNT = 50
+PRODUCTS_COUNT = 75
 
 
 class Command(BaseCommand):
@@ -16,14 +28,37 @@ class Command(BaseCommand):
         self.stdout.write("Creating new data...")
         try:
             for _ in range(NETWORKS_COUNT):
-                businesman = BusinessmanFactory()
-                Network.objects.create(
-                    plant=businesman.provider.provider.provider.provider,
-                    distributor=businesman.provider.provider.provider,
-                    dealership=businesman.provider.provider,
-                    retail_chain=businesman.provider,
-                    businessman=businesman,
+                plant = PlantFactory.create(
+                    contacts=(ContactFactory() for _ in range(CONTACTS_COUNT)),
+                    employees=(EmployeeFactory() for _ in range(EMPLOYEES_COUNT)),
+                    products=(ProductFactory() for _ in range(PRODUCTS_COUNT)),
                 )
+                factories = [plant]
+                factories_models = [
+                    DistributorFactory,
+                    DealershipFactory,
+                    RetailChainFactory,
+                    BusinessmanFactory,
+                ]
+                for_network = [plant]
+                for ModelFactory in factories_models:
+                    new_model = ModelFactory.create(
+                        contacts=(ContactFactory() for _ in range(CONTACTS_COUNT)),
+                        employees=(EmployeeFactory() for _ in range(EMPLOYEES_COUNT)),
+                        products=(ProductFactory() for _ in range(PRODUCTS_COUNT)),
+                        provider=factories.pop(),
+                    )
+                    for_network.append(new_model)
+                    factories.append(new_model)
+
+                Network.objects.create(
+                    plant=for_network[0],
+                    distributor=for_network[1],
+                    dealership=for_network[2],
+                    retail_chain=for_network[3],
+                    businessman=for_network[4],
+                )
+
         except Exception as e:
             self.stdout.write(
                 "Something went wrong. Check this exception, google it, etc:\n\n{}".format(

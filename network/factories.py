@@ -1,7 +1,8 @@
 import random
-import decimal
 import factory
+import factory.fuzzy
 from factory.django import DjangoModelFactory
+
 
 from network import models as net_models
 
@@ -51,7 +52,34 @@ class NetworkObjFactory(DjangoModelFactory):
     employees = factory.RelatedFactoryList(
         EmployeeFactory, size=lambda: random.randint(50, 100)
     )
-    debt = decimal.Decimal(random.randrange(50000, 1000000)) / 100
+    debt_value = factory.fuzzy.FuzzyDecimal(10000.00, 1000000.00)
+
+    @factory.post_generation
+    def contacts(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for contact in extracted:
+                self.contacts.add(contact)
+
+    @factory.post_generation
+    def products(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for product in extracted:
+                self.products.add(product)
+
+    @factory.post_generation
+    def employees(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for employee in extracted:
+                self.employees.add(employee)
 
     class Meta:
         abstract = True
@@ -89,3 +117,5 @@ class BusinessmanFactory(NetworkObjFactory):
 
     class Meta:
         model = net_models.Businessman
+
+
