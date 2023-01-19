@@ -129,6 +129,6 @@ class BusinessmanAdmin(ProviderWithLink):
     pass
 
 
-admin.site.register(net_models.Address)
+admin.site.register(net_models.Contact)
 admin.site.register(net_models.Product)
 admin.site.register(net_models.Employee)
