@@ -54,7 +54,6 @@ class NetworkObjFactory(DjangoModelFactory):
     debt = decimal.Decimal(random.randrange(50000, 1000000)) / 100
 
     class Meta:
-        model = net_models.NetworkObj
         abstract = True
 
 

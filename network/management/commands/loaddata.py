@@ -22,7 +22,7 @@ class Command(BaseCommand):
                     distributor=businesman.provider.provider.provider,
                     dealership=businesman.provider.provider,
                     retail_chain=businesman.provider,
-                    business_man=businesman,
+                    businessman=businesman,
                 )
         except Exception as e:
             self.stdout.write(

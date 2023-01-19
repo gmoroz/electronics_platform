@@ -114,10 +114,14 @@ class Network(models.Model):
     distributor = models.ForeignKey(Distributor, on_delete=models.CASCADE)
     dealership = models.ForeignKey(Dealership, on_delete=models.CASCADE)
     retail_chain = models.ForeignKey(RetailChain, on_delete=models.CASCADE)
-    business_man = models.ForeignKey(Businessman, on_delete=models.CASCADE)
+    businessman = models.ForeignKey(Businessman, on_delete=models.CASCADE)
+
+    @property
+    def name(self):
+        return f"Сеть № {self.id}"
 
     def __str__(self):
-        return f"Сеть № {self.id}"
+        return self.name
 
     class Meta:
         verbose_name = "Сеть поставщиков"
