@@ -71,8 +71,6 @@ class NetworkObj(models.Model):
 
 
 class Plant(NetworkObj):
-    pass
-
     class Meta:
         verbose_name = "Завод"
         verbose_name_plural = "Заводы"
@@ -80,6 +78,10 @@ class Plant(NetworkObj):
 
 class Distributor(NetworkObj):
     provider = models.ForeignKey(Plant, on_delete=models.CASCADE)
+
+    @property
+    def provider_name(self):
+        return self.provider.__class__.__name__.lower()
 
     class Meta:
         verbose_name = "Дистрибьютор"
