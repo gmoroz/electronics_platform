@@ -7,8 +7,6 @@ from network.factories import (
     PlantFactory,
     EmployeeFactory,
     ProductFactory,
-    DistributorFactory,
-    DealershipFactory,
     RetailChainFactory,
 )
 from network.models import Network
@@ -28,20 +26,18 @@ class Command(BaseCommand):
         self.stdout.write("Creating new data...")
         try:
             for i in range(NETWORKS_COUNT):
+                
                 print(f"{i+1}/{NETWORKS_COUNT}")
+                
                 plant = PlantFactory.create(
                     contacts=(ContactFactory() for _ in range(CONTACTS_COUNT)),
                     employees=(EmployeeFactory() for _ in range(EMPLOYEES_COUNT)),
                     products=(ProductFactory() for _ in range(PRODUCTS_COUNT)),
                 )
                 factories = [plant]
-                factories_models = [
-                    DistributorFactory,
-                    DealershipFactory,
-                    RetailChainFactory,
-                    BusinessmanFactory,
-                ]
+                factories_models = [RetailChainFactory, BusinessmanFactory]
                 for_network = [plant]
+                
                 for ModelFactory in factories_models:
                     new_model = ModelFactory.create(
                         contacts=(ContactFactory() for _ in range(CONTACTS_COUNT)),
@@ -54,10 +50,8 @@ class Command(BaseCommand):
 
                 Network.objects.create(
                     plant=for_network[0],
-                    distributor=for_network[1],
-                    dealership=for_network[2],
-                    retail_chain=for_network[3],
-                    businessman=for_network[4],
+                    retail_chain=for_network[1],
+                    businessman=for_network[2],
                 )
 
         except Exception as e:

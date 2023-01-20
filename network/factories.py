@@ -89,25 +89,9 @@ class PlantFactory(NetworkObjFactory):
         model = net_models.Plant
 
 
-class DistributorFactory(NetworkObjFactory):
-    debt_value = factory.fuzzy.FuzzyDecimal(10000.00, 1000000.00)
-    provider = factory.SubFactory(PlantFactory)
-
-    class Meta:
-        model = net_models.Distributor
-
-
-class DealershipFactory(NetworkObjFactory):
-    debt_value = factory.fuzzy.FuzzyDecimal(10000.00, 1000000.00)
-    provider = factory.SubFactory(DistributorFactory)
-
-    class Meta:
-        model = net_models.Dealership
-
-
 class RetailChainFactory(NetworkObjFactory):
     debt_value = factory.fuzzy.FuzzyDecimal(10000.00, 1000000.00)
-    provider = factory.SubFactory(DealershipFactory)
+    provider = factory.SubFactory(PlantFactory)
 
     class Meta:
         model = net_models.RetailChain

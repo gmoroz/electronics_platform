@@ -81,29 +81,16 @@ class Plant(models.Model):
     employees = models.ManyToManyField(Employee)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.name}"
+
     class Meta:
         verbose_name = "Завод"
         verbose_name_plural = "Заводы"
 
 
-class Distributor(NetworkObj):
-    provider = models.ForeignKey(Plant, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = "Дистрибьютор"
-        verbose_name_plural = "Дистрибьюторы"
-
-
-class Dealership(NetworkObj):
-    provider = models.ForeignKey(Distributor, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = "Диллерский центр"
-        verbose_name_plural = "Диллерские центры"
-
-
 class RetailChain(NetworkObj):
-    provider = models.ForeignKey(Dealership, on_delete=models.CASCADE)
+    provider = models.ForeignKey(Plant, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Розничная сеть"
@@ -120,8 +107,6 @@ class Businessman(NetworkObj):
 
 class Network(models.Model):
     plant = models.ForeignKey(Plant, on_delete=models.CASCADE)
-    distributor = models.ForeignKey(Distributor, on_delete=models.CASCADE)
-    dealership = models.ForeignKey(Dealership, on_delete=models.CASCADE)
     retail_chain = models.ForeignKey(RetailChain, on_delete=models.CASCADE)
     businessman = models.ForeignKey(Businessman, on_delete=models.CASCADE)
 

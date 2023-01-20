@@ -14,15 +14,11 @@ class NetworkAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "plant_link",
-        "distributor_link",
-        "dealership_link",
         "retail_chain_link",
         "business_man_link",
     )
     readonly_fields = (
         "plant_link",
-        "distributor_link",
-        "dealership_link",
         "retail_chain_link",
         "business_man_link",
     )
@@ -32,22 +28,6 @@ class NetworkAdmin(admin.ModelAdmin):
             "<a href='{}'>{}</a>".format(
                 reverse("admin:network_plant_change", args=(obj.plant.id,)),
                 obj.plant.name,
-            )
-        )
-
-    def distributor_link(self, obj):
-        return mark_safe(
-            "<a href='{}'>{}</a>".format(
-                reverse("admin:network_distributor_change", args=(obj.distributor.id,)),
-                obj.distributor.name,
-            )
-        )
-
-    def dealership_link(self, obj):
-        return mark_safe(
-            "<a href='{}'>{}</a>".format(
-                reverse("admin:network_dealership_change", args=(obj.dealership.id,)),
-                obj.dealership.name,
             )
         )
 
@@ -70,8 +50,6 @@ class NetworkAdmin(admin.ModelAdmin):
         )
 
     plant_link.short_description = "plant"
-    distributor_link.short_description = "distributor"
-    dealership_link.short_description = "dealership"
     retail_chain_link.short_description = "retail_chain"
     business_man_link.short_description = "businessman"
 
@@ -103,16 +81,6 @@ class BaseProviderAdmin(admin.ModelAdmin):
 
     class Meta:
         abstract = True
-
-
-@admin.register(net_models.Distributor)
-class DistributorAdmin(BaseProviderAdmin):
-    pass
-
-
-@admin.register(net_models.Dealership)
-class DealershipAdmin(BaseProviderAdmin):
-    pass
 
 
 @admin.register(net_models.RetailChain)
