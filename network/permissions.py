@@ -6,4 +6,4 @@ class IsActiveUserPermission(permissions.BasePermission):
     message = "Only active employees can use API"
 
     def has_permission(self, request, view):
-        return request.user
+        return request.user and request.user.is_active
