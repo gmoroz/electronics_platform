@@ -38,13 +38,10 @@ class NetworkObjBaseSerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True)
     employees = EmployeeSerializer(many=True)
 
-    def is_valid(self, *, raise_exception=False):
-        self._contacts = self.initial_data.get("contacts", [])
-        self._products = self.initial_data.get("products", [])
-        self._employees = self.initial_data.get("employees", [])
-        return super().is_valid(raise_exception=raise_exception)
-
     def _prepare_data(self, validated_data):
+        self._contacts = validated_data.get("contacts", [])
+        self._products = validated_data.get("products", [])
+        self._employees = validated_data.get("employees", [])
         contacts = []
         for contact_instance in self._contacts:
             address_data = contact_instance["address"]
@@ -131,6 +128,26 @@ class RetailChainListSerializer(serializers.ModelSerializer):
 class RetailChainSerializer(NetworkObjBaseSerializer):
     provider = PlantSerializer()
     debt = serializers.CharField()
+
+    def create(self, validated_data):
+        contacts, products, employees = self._prepare_data(validated_data)
+        provider = PlantSerializer().create(
+                validated_data=validated_data["provider"]
+            )
+
+        retail_chain = net_models.RetailChain.objects.create(
+            name=validated_data["name"],
+            debt_value=validated_data["debt"],
+            provider=provider,
+        )
+        retail_chain.contacts.set(contacts)
+        retail_chain.products.set(products)
+        retail_chain.employees.set(employees)
+
+        retail_chain.save()
+        return retail_chain
+
+
 
     class Meta:
         model = net_models.RetailChain

@@ -27,7 +27,7 @@ class Command(BaseCommand):
         try:
             for i in range(NETWORKS_COUNT):
 
-                print(f"{i+1}/{NETWORKS_COUNT}")
+                print(f"{i+1}/{NETWORKS_COUNT} done...")
 
                 plant = PlantFactory.create(
                     contacts=(ContactFactory() for _ in range(CONTACTS_COUNT)),

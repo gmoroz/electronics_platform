@@ -56,7 +56,7 @@ class Employee(models.Model):
 
 
 class NetworkObj(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     contacts = models.ManyToManyField(Contact)
     products = models.ManyToManyField(Product)
     employees = models.ManyToManyField(Employee)
@@ -79,7 +79,7 @@ class NetworkObj(models.Model):
 
 
 class Plant(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     contacts = models.ManyToManyField(Contact)
     products = models.ManyToManyField(Product)
     employees = models.ManyToManyField(Employee)
