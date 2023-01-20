@@ -32,6 +32,8 @@ class RetailChainViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return serializers.RetailChainListSerializer
+        if self.action == "retrieve":
+            return serializers.RetailChainRetrieveSerializer
         return serializers.RetailChainSerializer
 
     def list(self, request, *args, **kwargs):

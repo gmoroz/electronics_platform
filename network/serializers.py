@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from django.shortcuts import get_object_or_404
 from . import models as net_models
 
 
@@ -90,7 +90,6 @@ class NetworkObjBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = net_models.NetworkObj
         abstract = True
-        fields = ("name", "provider_name", "debt")
         read_only_fields = ("id",)
 
 
@@ -125,15 +124,28 @@ class RetailChainListSerializer(serializers.ModelSerializer):
         fields = ("name", "created_at", "id", "provider")
 
 
-class RetailChainSerializer(NetworkObjBaseSerializer):
+class RetailChainRetrieveSerializer(serializers.ModelSerializer):
+    contacts = ContactSerializer(many=True)
+    products = ProductSerializer(many=True)
+    employees = EmployeeSerializer(many=True)
     provider = PlantSerializer()
+    debt = serializers.CharField()
+
+    class Meta:
+        model = net_models.RetailChain
+        exclude = ("debt_value",)
+
+
+class RetailChainSerializer(NetworkObjBaseSerializer):
+    provider = serializers.SlugRelatedField(
+        slug_field="name", queryset=net_models.Plant.objects.all()
+    )
     debt = serializers.CharField()
 
     def create(self, validated_data):
         contacts, products, employees = self._prepare_data(validated_data)
-        provider = PlantSerializer().create(
-                validated_data=validated_data["provider"]
-            )
+        provider = net_models.Plant.objects.get(name=validated_data["provider_name"])
+        provider = PlantSerializer().update(validated_data=validated_data["provider"])
 
         retail_chain = net_models.RetailChain.objects.create(
             name=validated_data["name"],
@@ -147,7 +159,8 @@ class RetailChainSerializer(NetworkObjBaseSerializer):
         retail_chain.save()
         return retail_chain
 
-
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
 
     class Meta:
         model = net_models.RetailChain
