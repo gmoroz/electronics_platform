@@ -8,6 +8,10 @@ class Address(models.Model):
     house_number = models.PositiveIntegerField()
 
     def __str__(self):
+        return self.full_address
+
+    @property
+    def full_address(self):
         return f"{self.house_number}, {self.street} {self.country}, {self.city}"
 
     class Meta:

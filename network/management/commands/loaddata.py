@@ -13,8 +13,8 @@ from network.models import Network
 
 NETWORKS_COUNT = 5
 CONTACTS_COUNT = 3
-EMPLOYEES_COUNT = 50
-PRODUCTS_COUNT = 75
+EMPLOYEES_COUNT = 15
+PRODUCTS_COUNT = 25
 
 
 class Command(BaseCommand):
@@ -26,9 +26,9 @@ class Command(BaseCommand):
         self.stdout.write("Creating new data...")
         try:
             for i in range(NETWORKS_COUNT):
-                
+
                 print(f"{i+1}/{NETWORKS_COUNT}")
-                
+
                 plant = PlantFactory.create(
                     contacts=(ContactFactory() for _ in range(CONTACTS_COUNT)),
                     employees=(EmployeeFactory() for _ in range(EMPLOYEES_COUNT)),
@@ -37,7 +37,7 @@ class Command(BaseCommand):
                 factories = [plant]
                 factories_models = [RetailChainFactory, BusinessmanFactory]
                 for_network = [plant]
-                
+
                 for ModelFactory in factories_models:
                     new_model = ModelFactory.create(
                         contacts=(ContactFactory() for _ in range(CONTACTS_COUNT)),

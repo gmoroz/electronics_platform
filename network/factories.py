@@ -18,7 +18,7 @@ class AddressFactory(DjangoModelFactory):
 
 
 class ContactFactory(DjangoModelFactory):
-    email = factory.Faker("country")
+    email = factory.Faker("email")
     address = factory.SubFactory(AddressFactory)
 
     class Meta:
