@@ -15,5 +15,9 @@
 
 Запуск проекта
 
+Не забудьте определить переменную SECRET_KEY после создания .env
+
+    cp .env.example .env
     docker run --name elect -p 5432:5432 -e POSTGRES_PASSWORD=elect -e POSTGRES_USER=elect -e  POSTGRES_DB=elect -d postgres
     ./manage.py migrate
+    ./manage.py runserver
