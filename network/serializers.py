@@ -67,7 +67,8 @@ class NetworkObjBaseSerializer(serializers.ModelSerializer):
         employees = []
         for employee_instance in self._employees:
             employee, _ = net_models.Employee.objects.get_or_create(
-                name=employee_instance["name"]
+                first_name=employee_instance["first_name"],
+                last_name=employee_instance["last_name"],
             )
             employees.append(employee)
 
@@ -144,8 +145,7 @@ class RetailChainSerializer(NetworkObjBaseSerializer):
 
     def create(self, validated_data):
         contacts, products, employees = self._prepare_data(validated_data)
-        provider = net_models.Plant.objects.get(name=validated_data["provider_name"])
-        provider = PlantSerializer().update(validated_data=validated_data["provider"])
+        provider = get_object_or_404(net_models.Plant, name=validated_data["provider"])
 
         retail_chain = net_models.RetailChain.objects.create(
             name=validated_data["name"],
@@ -159,9 +159,20 @@ class RetailChainSerializer(NetworkObjBaseSerializer):
         retail_chain.save()
         return retail_chain
 
-    def update(self, instance, validated_data):
-        instance = super().update(instance, validated_data)
+    def update(self, retail_chain, validated_data):
+        retail_chain = super().update(
+            instance=retail_chain, validated_data=validated_data
+        )
+        provider = get_object_or_404(
+            net_models.Plant, name=validated_data.get("provider", retail_chain.provider)
+        )
+        retail_chain.provider = provider
+
+        retail_chain.save()
+        return retail_chain
 
     class Meta:
         model = net_models.RetailChain
         exclude = ("debt_value",)
+
+

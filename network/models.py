@@ -45,10 +45,11 @@ class Product(models.Model):
 
 
 class Employee(models.Model):
-    name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         verbose_name = "Сотрудник"
@@ -56,7 +57,7 @@ class Employee(models.Model):
 
 
 class NetworkObj(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     contacts = models.ManyToManyField(Contact)
     products = models.ManyToManyField(Product)
     employees = models.ManyToManyField(Employee)
@@ -79,7 +80,7 @@ class NetworkObj(models.Model):
 
 
 class Plant(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     contacts = models.ManyToManyField(Contact)
     products = models.ManyToManyField(Product)
     employees = models.ManyToManyField(Employee)
