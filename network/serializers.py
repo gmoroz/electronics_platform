@@ -197,4 +197,42 @@ class BusinessmanRetrieveSerializer(serializers.ModelSerializer):
 
 
 class BusinessmanSerializer(NetworkObjBaseSerializer):
-    pass
+    provider = serializers.SlugRelatedField(
+        slug_field="name", queryset=net_models.RetailChain.objects.all()
+    )
+    debt = serializers.CharField()
+
+    def create(self, validated_data):
+        contacts, products, employees = self._prepare_data(validated_data)
+        provider = get_object_or_404(
+            net_models.RetailChain, name=validated_data["provider"]
+        )
+
+        businessman = net_models.Businessman.objects.create(
+            name=validated_data["name"],
+            debt_value=validated_data["debt"],
+            provider=provider,
+        )
+        businessman.contacts.set(contacts)
+        businessman.products.set(products)
+        businessman.employees.set(employees)
+
+        businessman.save()
+        return businessman
+
+    def update(self, businessman, validated_data):
+        businessman = super().update(
+            instance=businessman, validated_data=validated_data
+        )
+        provider = get_object_or_404(
+            net_models.RetailChain,
+            name=validated_data.get("provider", businessman.provider),
+        )
+        businessman.provider = provider
+
+        businessman.save()
+        return businessman
+
+    class Meta:
+        model = net_models.RetailChain
+        exclude = ("debt_value",)
