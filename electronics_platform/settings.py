@@ -44,8 +44,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "network",
     "rest_framework",
+    "rest_framework.authtoken",
+    "djoser",
+    "network",
 ]
 
 MIDDLEWARE = [
@@ -96,6 +98,12 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ]
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
