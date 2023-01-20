@@ -33,7 +33,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
         read_only_fields = ("id",)
 
 
-class NetworkObj(serializers.ModelSerializer):
+class NetworkObjBaseSerializer(serializers.ModelSerializer):
     contacts = ContactSerializer(many=True)
     products = ProductSerializer(many=True)
     employees = EmployeeSerializer(many=True)
@@ -103,7 +103,7 @@ class PlantListSerializer(serializers.ModelSerializer):
         fields = ("name", "created_at", "id")
 
 
-class PlantSerializer(NetworkObj):
+class PlantSerializer(NetworkObjBaseSerializer):
     def create(self, validated_data):
         contacts, products, employees = self._prepare_data(validated_data)
         plant = net_models.Plant.objects.create(name=validated_data["name"])
@@ -118,3 +118,20 @@ class PlantSerializer(NetworkObj):
         model = net_models.Plant
         read_only_fields = ("created_at", "id")
         fields = "__all__"
+
+
+class RetailChainListSerializer(serializers.ModelSerializer):
+    provider = PlantListSerializer()
+
+    class Meta:
+        model = net_models.RetailChain
+        fields = ("name", "created_at", "id", "provider")
+
+
+class RetailChainSerializer(NetworkObjBaseSerializer):
+    provider = PlantSerializer()
+    debt = serializers.CharField()
+
+    class Meta:
+        model = net_models.RetailChain
+        exclude = ("debt_value",)

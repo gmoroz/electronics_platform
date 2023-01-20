@@ -12,7 +12,7 @@ class Address(models.Model):
 
     @property
     def full_address(self):
-        return f"{self.house_number}, {self.street}, {self.country}, {self.city}"
+        return f"{self.country}, {self.city}, {self.street}, {self.house_number}"
 
     class Meta:
         verbose_name = "Адрес"
