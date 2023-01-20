@@ -176,3 +176,25 @@ class RetailChainSerializer(NetworkObjBaseSerializer):
         exclude = ("debt_value",)
 
 
+class BusinessmanListSerializer(serializers.ModelSerializer):
+    provider = RetailChainListSerializer()
+
+    class Meta:
+        model = net_models.Businessman
+        fields = ("name", "created_at", "id", "provider")
+
+
+class BusinessmanRetrieveSerializer(serializers.ModelSerializer):
+    contacts = ContactSerializer(many=True)
+    products = ProductSerializer(many=True)
+    employees = EmployeeSerializer(many=True)
+    provider = PlantSerializer()
+    debt = serializers.CharField()
+
+    class Meta:
+        model = net_models.Businessman
+        exclude = ("debt_value",)
+
+
+class BusinessmanSerializer(NetworkObjBaseSerializer):
+    pass
