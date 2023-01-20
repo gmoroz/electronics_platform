@@ -39,9 +39,9 @@ class NetworkObjList(serializers.ModelSerializer):
     employees = EmployeeSerializer(many=True)
 
     def is_valid(self, *, raise_exception=False):
-        self._contacts = self.initial_data["contacts"]
-        self._products = self.initial_data["products"]
-        self._employees = self.initial_data["employees"]
+        self._contacts = self.initial_data.get("contacts", [])
+        self._products = self.initial_data.get("products", [])
+        self._employees = self.initial_data.get("employees", [])
         return super().is_valid(raise_exception=raise_exception)
 
     def _prepare_data(self, validated_data):
@@ -76,6 +76,20 @@ class NetworkObjList(serializers.ModelSerializer):
 
         return contacts, products, employees
 
+    def update(self, instance, validated_data):
+        contacts, products, employees = self._prepare_data(validated_data)
+        instance.name = validated_data.get("name", instance.name)
+
+        if contacts:
+            instance.contacts.set(contacts)
+        if products:
+            instance.products.set(products)
+        if employees:
+            instance.employees.set(employees)
+
+        instance.save()
+        return instance
+
     class Meta:
         model = net_models.NetworkObj
         abstract = True
@@ -91,7 +105,7 @@ class PlantListSerializer(serializers.ModelSerializer):
 
 class PlantSerializer(NetworkObjList):
     def create(self, validated_data):
-        contacts, products, employees = super()._prepare_data(validated_data)
+        contacts, products, employees = self._prepare_data(validated_data)
         plant = net_models.Plant.objects.create(name=validated_data["name"])
         plant.contacts.set(contacts)
         plant.products.set(products)
@@ -99,8 +113,7 @@ class PlantSerializer(NetworkObjList):
 
         plant.save()
         return plant
-   
-        
+
     class Meta:
         model = net_models.Plant
         read_only_fields = ("created_at", "id")
