@@ -61,11 +61,24 @@ class NetworkObj(models.Model):
     contacts = models.ManyToManyField(Contact)
     products = models.ManyToManyField(Product)
     employees = models.ManyToManyField(Employee)
-    debt_value = models.DecimalField(decimal_places=2, default=0, max_digits=11)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.name}"
+
+    class Meta:
+        abstract = True
+
+
+class Plant(NetworkObj):
+    class Meta:
+        verbose_name = "Завод"
+        verbose_name_plural = "Заводы"
+
+
+class RetailChain(NetworkObj):
+    provider = models.ForeignKey(Plant, on_delete=models.CASCADE)
+    debt_value = models.DecimalField(decimal_places=2, default=0, max_digits=11)
 
     @property
     def provider_name(self):
@@ -76,34 +89,21 @@ class NetworkObj(models.Model):
         return "{} RUR".format(self.debt_value)
 
     class Meta:
-        abstract = True
-
-
-class Plant(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    contacts = models.ManyToManyField(Contact)
-    products = models.ManyToManyField(Product)
-    employees = models.ManyToManyField(Employee)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.name}"
-
-    class Meta:
-        verbose_name = "Завод"
-        verbose_name_plural = "Заводы"
-
-
-class RetailChain(NetworkObj):
-    provider = models.ForeignKey(Plant, on_delete=models.CASCADE)
-
-    class Meta:
         verbose_name = "Розничная сеть"
         verbose_name_plural = "Розничные сети"
 
 
 class Businessman(NetworkObj):
     provider = models.ForeignKey(RetailChain, on_delete=models.CASCADE)
+    debt_value = models.DecimalField(decimal_places=2, default=0, max_digits=11)
+
+    @property
+    def provider_name(self):
+        return self.provider.__class__.__name__.lower()
+
+    @property
+    def debt(self):
+        return "{} RUR".format(self.debt_value)
 
     class Meta:
         verbose_name = "Индивидуальный предприниматель"

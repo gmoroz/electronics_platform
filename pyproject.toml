@@ -17,6 +17,9 @@ setuptools = "^66.1.0"
 djoser = "^2.1.0"
 
 
+[tool.poetry.group.dev.dependencies]
+mypy = "^0.991"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
