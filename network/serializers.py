@@ -39,11 +39,8 @@ class NetworkObjBaseSerializer(serializers.ModelSerializer):
     employees = EmployeeSerializer(many=True)
 
     def _prepare_data(self, validated_data):
-        self._contacts = validated_data.get("contacts", [])
-        self._products = validated_data.get("products", [])
-        self._employees = validated_data.get("employees", [])
         contacts = []
-        for contact_instance in self._contacts:
+        for contact_instance in validated_data.get("contacts", []):
             address_data = contact_instance["address"]
             address, _ = net_models.Address.objects.get_or_create(
                 country=address_data["country"],
@@ -57,7 +54,7 @@ class NetworkObjBaseSerializer(serializers.ModelSerializer):
             contacts.append(contact)
 
         products = []
-        for product_instance in self._products:
+        for product_instance in validated_data.get("products", []):
             product, _ = net_models.Product.objects.get_or_create(
                 name=product_instance["name"],
                 model=product_instance["model"],
@@ -65,7 +62,7 @@ class NetworkObjBaseSerializer(serializers.ModelSerializer):
             products.append(product)
 
         employees = []
-        for employee_instance in self._employees:
+        for employee_instance in validated_data.get("employees", []):
             employee, _ = net_models.Employee.objects.get_or_create(
                 first_name=employee_instance["first_name"],
                 last_name=employee_instance["last_name"],
