@@ -1,5 +1,6 @@
 from rest_framework import pagination, viewsets
-from django.http import JsonResponse
+from rest_framework.permissions import IsAuthenticated
+
 from . import models as net_models, serializers, permissions
 
 
@@ -10,7 +11,7 @@ class BasePagination(pagination.PageNumberPagination):
 class PlantViewSet(viewsets.ModelViewSet):
     queryset = net_models.Plant.objects.all()
     pagination_class = BasePagination
-    permission_classes = (permissions.IsActiveUserPermission,)
+    permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -29,7 +30,7 @@ class PlantViewSet(viewsets.ModelViewSet):
 class RetailChainViewSet(viewsets.ModelViewSet):
     queryset = net_models.RetailChain.objects.all()
     pagination_class = BasePagination
-    permission_classes = (permissions.IsActiveUserPermission,)
+    permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -50,7 +51,7 @@ class RetailChainViewSet(viewsets.ModelViewSet):
 class BusinessmanViewSet(viewsets.ModelViewSet):
     queryset = net_models.Businessman.objects.all()
     pagination_class = BasePagination
-    permission_classes = (permissions.IsActiveUserPermission,)
+    permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
         if self.action == "list":
